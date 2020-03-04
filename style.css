@@ -1,0 +1,13 @@
+body {
+    background-color: silver;
+}
+.box {
+    background-color: white;
+}
+.boxd {
+    padding-top: 60px;
+    padding-bottom: 30px;
+    border: crimson;
+    border-style: dashed;
+    border-width: 2px;
+}
