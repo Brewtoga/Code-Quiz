@@ -1,5 +1,5 @@
 body {
-    background-color: silver;
+    background-color:lightblue;
 }
 .box {
     background-color: white;
@@ -7,7 +7,7 @@ body {
 .boxd {
     padding-top: 60px;
     padding-bottom: 30px;
-    border: crimson;
-    border-style: dashed;
+    border:lightblue;
+    border-style: solid;
     border-width: 2px;
 }
