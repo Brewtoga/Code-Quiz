@@ -4,10 +4,9 @@ body {
 .box {
     background-color: white;
 }
-.boxd {
-    padding-top: 60px;
-    padding-bottom: 30px;
-    border:lightblue;
-    border-style: solid;
-    border-width: 2px;
+
+
+.hide {
+display:none;
+
 }
