@@ -1,70 +1,31 @@
 $(document).ready(function () {
 
+
+    var currentHighscore = 500;
+    const codeQuestions = [
+        {
+            question: "Inside which HTML element do we put the JavaScript?",
+            answers: [
+                {text:'js', correct: false},
+                {text:'javascripting', correct: false},
+                {text:'scripting', correct: false},
+                {text:'script', correct: true},
+            ]
+        },
+        
+    ];
+
     $("#startButton").on("click", startQuiz)
     function startQuiz() {
-        var i = 0; i++;
-        var currentHighscore = 500;
-        var codeQuestions = [
-            {
-                question: "Inside which HTML element do we put the JavaScript?",
-                answerA: 'js',
-                answerB: 'javascripting',
-                answerC: 'scripting',
-                answerD: 'script',
-                correctA: 'script',
-            },
-            {
-                question: 'What is the second Question?',
-                answerA: 'A',
-                answerB: 'B',
-                answerC: 'C',
-                answerD: 'D',
-                correctA: 'C',
-            },
-            // {
-            //     question: 'Inside which HTML element do we put the JavaScript?',
-            //     answerA: 'js',
-            //     answerB: 'javascripting',
-            //     answerC: 'scripting',
-            //     answerD: 'script',
-            //     correctA: 'script',
-            // },
-            // {
-            //     question: 'Inside which HTML element do we put the JavaScript?',
-            //     answerA: 'js',
-            //     answerB: 'javascripting',
-            //     answerC: 'scripting',
-            //     answerD: 'script',
-            //     correctA: 'script',
-            // },
-            // {
-            //     question: 'Inside which HTML element do we put the JavaScript?',
-            //     answerA: 'js',
-            //     answerB: 'javascripting',
-            //     answerC: 'scripting',
-            //     answerD: 'script',
-            //     correctA: 'script',
-            // },
-            // {
-            //     question: 'Inside which HTML element do we put the JavaScript?',
-            //     answerA: 'js',
-            //     answerB: 'javascripting',
-            //     answerC: 'scripting',
-            //     answerD: 'script',
-            //     correctA: 'script',
-            // },
-        ];
-        console.log("start");
-        console.log(codeQuestions);
-        console.log(codeQuestions[0].question);
-
+        i = 0
+        e=0
         $("#startButton").attr("class", "hide");
         $("#highscore").append(" " + currentHighscore);
-        $("#question").attr("class", "unhide"); $("#question").text(codeQuestions[0].question);
-        $("#ans1").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans1").text(codeQuestions[0].answerA);
-        $("#ans2").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans2").text(codeQuestions[0].answerB);
-        $("#ans3").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans3").text(codeQuestions[0].answerC);
-        $("#ans4").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans4").text(codeQuestions[0].answerD);
+        $("#question").attr("class", "unhide margin"); $("#question").text(codeQuestions[i].question);
+        $("#ans1").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans1").text(codeQuestions[i].answers[e].text);
+        $("#ans2").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans2").text(codeQuestions[i].answers[e+1].text);
+        $("#ans3").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans3").text(codeQuestions[i].answers[e+2].text);
+        $("#ans4").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans4").text(codeQuestions[i].answers[e+3].text);
         var minutesAndSeconds = "Minutes and Seconds"
         $("#secandMin").attr("class", "unhide text-center"); $("#secandMin").text(minutesAndSeconds);
 
@@ -76,12 +37,15 @@ $(document).ready(function () {
 
 
         function checkAnswer() {
+            var score = 0
+
             console.log("in checkanswer function")
             $("#secandMin").text("getting closer");
-            
+        
+
         }
 
-            
+
 
 
 
