@@ -1,10 +1,10 @@
 $(document).ready(function () {
 
-    var totalSeconds;
-    var seconds = 0;
     var currentHighscore = 500;
+    var testTimer;
     var i;  // this is to move through different questions's
-    // var j=0;  // this is to move through different answers's
+    var timerPerQuestion = [];
+    var answer = [];
 
 
 
@@ -12,28 +12,28 @@ $(document).ready(function () {
         {
             question: "Inside which HTML element do we put the JavaScript?",
             answers: [
-                { text: 'js', correct: false },
-                { text: 'javascripting', correct: false },
-                { text: 'scripting', correct: false },
-                { text: 'script', correct: true },
+                { text: 'js', ans: 'ans1', correct: false },
+                { text: 'javascripting', ans: 'ans2', correct: false },
+                { text: 'scripting', ans: 'ans3', correct: false },
+                { text: 'script', ans: 'ans4', correct: true },
             ]
         },
         {
             question: "Which of the following is an Element in JavaScript?",
             answers: [
-                { text: 'div', correct: false },
-                { text: '<div>', correct: true },
-                { text: 'header', correct: false },
-                { text: 'body', correct: false },
+                { text: 'div', ans: 'ans1', correct: false },
+                { text: '<div>', ans: 'ans2', correct: true },
+                { text: 'header', ans: 'ans3', correct: false },
+                { text: 'body', ans: 'ans4', correct: false },
             ]
         },
         {
             question: "What is the correct syntax for referring to an external script called xxx.js?",
             answers: [
-                { text: 'script src', correct: true },
-                { text: 'script href', correct: false },
-                { text: 'src', correct: false },
-                { text: 'href', correct: false },
+                { text: 'script src', ans: 'ans1', correct: true },
+                { text: 'script href', ans: 'ans2', correct: false },
+                { text: 'src', ans: 'ans3', correct: false },
+                { text: 'href', ans: 'ans4', correct: false },
             ]
         },
 
@@ -42,79 +42,89 @@ $(document).ready(function () {
     $("#startButton").on("click", startQuiz)
 
     function startQuiz() {
+        $("#ans1").on("click", nextQuestion);
+        $("#ans2").on("click", nextQuestion);
+        $("#ans3").on("click", nextQuestion);
+        $("#ans4").on("click", nextQuestion);
 
         $("#startButton").attr("class", "hide");
-        // var myVar = setInterval(myTimer, 1000);
-
-        // function myTimer() {
-        //   var d = new Date();
-        //   var t = d.toLocaleTimeString();
-        //   document.getElementById("demo").innerHTML = t;
-        // }
-
-        // function myStopFunction() {
-        //   clearInterval(myVar);
-        // }
+       
+        i = 0;
         var counter = 0;
         var minutes = 0;
-        setInterval(function () {
-
-            counter++;
-            console.log(counter);
-            //   $("#seconds").attr("class", "unhide text-center");$("#seconds").text(counter+" seconds");
-            //   $("#minutes").attr("class", "unhide text-center");$("#minutes").text(minutes+" minutes");
 
 
 
-            //   if (counter === 59) {
-            //       minutes++;
-            //       counter = 0;
-            //      }
+        // function firstQuestion() {
+        //     $("#highscore").append(" " + currentHighscore);
+        //     i = 0;
 
-            //         $("#minutes").attr("class", "unhide text-center"); $("#minutes").text(`${minutes} minutes and ${counter} seconds`);
-            //         if (minutes === 3){
-            // $().text(minutes+" minutes");
-            // $("#seconds").text(counter+" seconds");
-            // clearInterval(timerOverall);
-            //  }
+        //     // console.log(i);
+        //     $("#question").attr("class", "unhide margin"); $("#question").text(codeQuestions[i].question);
+        //     $("#ans1").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans1").text(codeQuestions[i].answers[0].text);
+        //     $("#ans2").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans2").text(codeQuestions[i].answers[1].text);
+        //     $("#ans3").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans3").text(codeQuestions[i].answers[2].text);
+        //     $("#ans4").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans4").text(codeQuestions[i].answers[3].text);
 
-        }, 1000);
+        //     checkAnswer();
 
-        // var stopTimer = setInterval(myTimer, 1000);
+        // };
+        //firstQuestion();
+        function startTimer() {
+            counter = 0;
+            testTimer = setInterval(function () {
 
-        //     function myTimer() {
-        //         seconds = 0;
-        //         seconds++;
-        //         var secondM = seconds;
+                counter++;
+                console.log(counter);
+                $("#seconds").attr("class", "unhide text-center"); $("#seconds").text(counter + " seconds");
+                $("#minutes").attr("class", "unhide text-center"); $("#minutes").text(minutes + " minutes");
 
 
-        //     };
 
+                //   if (counter === 59) {
+                //       minutes++;
+                //       counter = 0;
+                //      }
 
-        function firstQuestion() {
-            $("#highscore").append(" " + currentHighscore);
-            i = 0;
+                //         $("#minutes").attr("class", "unhide text-center"); $("#minutes").text(`${minutes} minutes and ${counter} seconds`);
+                //         if (minutes === 3){
+                // $().text(minutes+" minutes");
+                // $("#seconds").text(counter+" seconds");
+                // clearInterval(timerOverall);
+                //  }
 
-            // console.log(i);
-            $("#question").attr("class", "unhide margin"); $("#question").text(codeQuestions[i].question);
-            $("#ans1").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans1").text(codeQuestions[i].answers[0].text);
-            $("#ans2").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans2").text(codeQuestions[i].answers[1].text);
-            $("#ans3").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans3").text(codeQuestions[i].answers[2].text);
-            $("#ans4").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans4").text(codeQuestions[i].answers[3].text);
-
-            checkAnswer();
-
+            }, 1000);
         };
-        firstQuestion();
+
+        function endTimer() {
+            clearInterval(testTimer);
+
+        }
 
 
 
 
-        function checkAnswer() {
-            $("#ans1").on("click", nextQuestion);
-            $("#ans2").on("click", nextQuestion);
-            $("#ans3").on("click", nextQuestion);
-            $("#ans4").on("click", nextQuestion);
+
+
+        function checkAnswer(ans) {
+            console.log("question: " + i + ", counterValue = " + counter);
+            timerPerQuestion.push(counter);
+
+            endTimer();
+            for (var j = 0; j < codeQuestions[i - 1].answers.length; j++) {
+                if (ans == codeQuestions[i - 1].answers[j].ans) {
+                    if (codeQuestions[i - 1].answers[j].correct) {
+                        answer.push(1);
+                    } else {
+                        answer.push(0);
+                    }
+                }
+
+            }
+
+
+
+
             // var score = 0
             // if (i = codeQuestions.length) {
             //     console.log('done');
@@ -140,22 +150,48 @@ $(document).ready(function () {
 
 
 
-        function nextQuestion() {
+        function nextQuestion(id) {
+
+            if (i > 0) {
+                console.log(id.target.id);
+                checkAnswer(id.target.id);
+            }
+
+            console.log(i);
+            if (i < codeQuestions.length) {
+
+                $("#question").attr("class", "unhide margin"); $("#question").text(codeQuestions[i].question);
+                $("#ans1").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans1").text(codeQuestions[i].answers[0].text);
+                $("#ans2").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans2").text(codeQuestions[i].answers[1].text);
+                $("#ans3").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans3").text(codeQuestions[i].answers[2].text);
+                $("#ans4").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans4").text(codeQuestions[i].answers[3].text);
+                startTimer();
+
+                // $("#ans1").on("click", checkAnswer);
+                // $("#ans2").on("click", checkAnswer);
+                // $("#ans3").on("click", checkAnswer);
+                // $("#ans4").on("click", checkAnswer);
+                //checkAnswer();
+            }
+            if (i == codeQuestions.length) {
+                endGame();
+            }
 
             i++;
-            $("#startButton").attr("class", "hide");
-            $("#question").attr("class", "unhide margin"); $("#question").text(codeQuestions[i].question);
-            $("#ans1").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans1").text(codeQuestions[i].answers[0].text);
-            $("#ans2").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans2").text(codeQuestions[i].answers[1].text);
-            $("#ans3").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans3").text(codeQuestions[i].answers[2].text);
-            $("#ans4").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans4").text(codeQuestions[i].answers[3].text);
 
+        }
+        nextQuestion();
 
-            // $("#ans1").on("click", checkAnswer);
-            // $("#ans2").on("click", checkAnswer);
-            // $("#ans3").on("click", checkAnswer);
-            // $("#ans4").on("click", checkAnswer);
-            checkAnswer();
+        function endGame() {
+            console.log(answer);
+            console.log(timerPerQuestion);
+            $("#startButton").attr("class", "unhide col-3 btn btn-info btn-hover btn-pill");
+            $("#question").attr("class", "hide");
+            $("#ans1").attr("class", "hide");
+            $("#ans2").attr("class", "hide");
+            $("#ans3").attr("class", "hide");
+            $("#ans4").attr("class", "hide");
+
 
 
         }
