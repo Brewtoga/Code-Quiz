@@ -6,7 +6,7 @@ $(document).ready(function () {
     var timerPerQuestion = [];
     var answer = [];
     var totalSeconds = 0;
-    var totalScore = 0;
+    var totalScore;
     var score = 0;
 
 
@@ -87,9 +87,15 @@ $(document).ready(function () {
                 }
 
                 totalScore = ((totalScore + score) - totalSeconds);
-                if (totalScore > currentHighscore)
+                if (totalScore > currentHighscore) {
+                    currentHighscore = totalScore;
                     localStorage.setItem('highScore', currentHighscore);
-                console.log(totalScore);
+                    localStorage.setItem('yourScore',totalScore);
+                    console.log(totalScore);
+                }
+                else {
+                    localStorage.setItem('yourScore',totalScore);
+                }
                 c++
             }
 
@@ -110,8 +116,10 @@ $(document).ready(function () {
             for (var j = 0; j < codeQuestions[i - 1].answers.length; j++) {
                 if (ans == codeQuestions[i - 1].answers[j].ans) {
                     if (codeQuestions[i - 1].answers[j].correct) {
+                        confirm ("You are correct");
                         answer.push(1);
                     } else {
+                        confirm ("you are WRONG!!!!");
                         answer.push(0);
                     }
                 }
@@ -119,8 +127,6 @@ $(document).ready(function () {
             }
 
         };
-
-
 
         function nextQuestion(id) {
 
@@ -152,14 +158,23 @@ $(document).ready(function () {
         function endGame() {
             console.log(answer);
             console.log(timerPerQuestion);
-            // $("#startButton").attr("class", "unhide col-3 btn btn-info btn-hover btn-pill text-center");
-            $("#question").attr("class", "hide");
+            $("#question").text("Thank you for Taking my quiz");
             $("#ans1").attr("class", "hide");
             $("#ans2").attr("class", "hide");
             $("#ans3").attr("class", "hide");
             $("#ans4").attr("class", "hide");
             $("#minutes").attr("class", "hide");
             $("#seconds").attr("class", "hide");
+            var yourScore = localStorage.getItem('yourScore');
+            var highScore = localStorage.getItem('highScore');
+            $("#ans1").attr("class", "unhide text-bold");$("#ans1").text("Your Score was "+yourScore);
+            $("#ans2").attr("class", "unhide text-bold");$("#ans2").text("Previous High Score "+highScore);
+            $("#ans3").attr("class", "unhide btn btn-danger btn-hover btn-pill"); $("#ans3").text("Click here to Play again");
+            
+            
+
+
+
         }
 
 

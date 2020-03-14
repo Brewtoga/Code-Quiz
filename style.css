@@ -19,3 +19,9 @@ display:none;
     background-color: white;
     text-align: center;
 }
+.correct{
+    background-color: green;
+}
+.notcorrect{
+    background-color: red;
+}
