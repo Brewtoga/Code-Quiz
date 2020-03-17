@@ -9,7 +9,10 @@ $(document).ready(function () {
     var totalSeconds;
     var minutes = 0;
     var currentQuestionIndex;
-    var ct=6;
+    var ct = 6;
+    var questionTimer;
+    var secondsArray = [];
+    var correctAnsArray = [];
 
 
 
@@ -19,15 +22,21 @@ $(document).ready(function () {
         console.log('started');
         startButton.addClass('hide');
         currentQuestionIndex = 0;
-        var countDowntoBegin = setInterval(function(){
+        var countDowntoBegin = setInterval(function () {
             ct--
-            $('#minandsec').removeClass('hide').text(`Quiz will begin in ${ct} seconds!`);
-            
-            if (ct===-1){
+            $('#ctDown').removeClass('hide').text(`Quiz will begin in ${ct} seconds!`);
+
+            if (ct === -1) {
+                stopCountdown();
                 startTimer();
-                clearInterval(countDowntoBegin);
+                ct = 6
             }
-        },1000)
+        }, 1000)
+
+        function stopCountdown() {
+            $('#ctDown').addClass('hide');
+            clearInterval(countDowntoBegin);
+        }
     };
 
     function startTimer() {
@@ -36,8 +45,8 @@ $(document).ready(function () {
         ans2Button.removeClass('hide'); ans2Button.text(codeQuestions[currentQuestionIndex].answers[1].text);
         ans3Button.removeClass('hide'); ans3Button.text(codeQuestions[currentQuestionIndex].answers[2].text);
         ans4Button.removeClass('hide'); ans4Button.text(codeQuestions[currentQuestionIndex].answers[3].text);
-        counter = 0;
-        setInterval(function () {
+        var counter = 0;
+        questionTimer = setInterval(function (totalSeconds) {
             totalSeconds++
             counter++;
             console.log(counter);
@@ -49,32 +58,40 @@ $(document).ready(function () {
             $('#minandsec').removeClass('hide').text(`${minutes} minutes and ${counter} seconds`);
 
         }, 1000);
-        $("#ans1").on("click", nextQuestion);
-        $("#ans2").on("click", nextQuestion);
-        $("#ans3").on("click", nextQuestion);
-        $("#ans4").on("click", nextQuestion);
+        ans1Button.on("click", checkAnswer);
+        ans2Button.on("click", checkAnswer);
+        ans3Button.on("click", checkAnswer);
+        ans4Button.on("click", checkAnswer);
     };
+
+    function stopQuestionTimer() {
+        // console.log(totalSeconds);
+        clearInterval(questionTimer);
+    }
 
     function checkAnswer() {
-        endTimer(ans);
-        console.log("question: " + i + ", counterValue = " + counter);
-        timerPerQuestion.push(counter);
-        for (var j = 0; j < codeQuestions[i - 1].answers[j].length; j++) {
-            if (ans == codeQuestions[i - 1].answers[j].ans) {
-                if (codeQuestions[i - 1].answers[j].correct) {
-                    confirm("You are correct");
-                    correctAnswers++;
-                    answer.push(1);
-                }
-                else {
-                    confirm("you are WRONG!!!!");
-                    answer.push(0);
-                }
-            }
-
-        }
+        stopQuestionTimer();
+        console.log("checking answers ");
+        questionButton.addClass("hide"); ans1Button.addClass('hide'); ans2Button.addClass('hide');
+        ans3Button.addClass('hide'); ans4Button.addClass('hide'); $('#minandsec').addClass('hide');
+        nextButton.removeClass('hide'); nextButton.on('click', displayNextQuestion)
 
     };
+    function displayNextQuestion() {
+        nextButton.addClass('hide');
+        currentQuestionIndex++
+        if (currentQuestionIndex > codeQuestions.length) {
+            endGame();
+        }
+        else {
+            startTimer();
+        }
+    }
+
+    function endGame() {
+        startButton.removeClass('hide')
+        console.log('done');
+    }
 
 
 
