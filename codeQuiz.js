@@ -1,13 +1,80 @@
 $(document).ready(function () {
+    const startButton = $("#startButton")
+    const nextButton = $('#nextButton')
+    const questionButton = $("#question")
+    const ans1Button = $('#ans1')
+    const ans2Button = $('#ans2')
+    const ans3Button = $('#ans3')
+    const ans4Button = $('#ans4')
+    var totalSeconds;
+    var minutes = 0;
+    var currentQuestionIndex;
+    var ct=6;
 
-    var currentHighscore = 500;
-    var testTimer;
-    var i;  // this is to move through different questions's
-    var timerPerQuestion = [];
-    var answer = [];
-    var totalSeconds = 0;
-    var totalScore;
-    var score = 0;
+
+
+    startButton.on('click', startQuiz);
+
+    function startQuiz() {
+        console.log('started');
+        startButton.addClass('hide');
+        currentQuestionIndex = 0;
+        var countDowntoBegin = setInterval(function(){
+            ct--
+            $('#minandsec').removeClass('hide').text(`Quiz will begin in ${ct} seconds!`);
+            
+            if (ct===-1){
+                startTimer();
+                clearInterval(countDowntoBegin);
+            }
+        },1000)
+    };
+
+    function startTimer() {
+        questionButton.removeClass("hide"); questionButton.text(codeQuestions[currentQuestionIndex].question);
+        ans1Button.removeClass('hide'); ans1Button.text(codeQuestions[currentQuestionIndex].answers[0].text);
+        ans2Button.removeClass('hide'); ans2Button.text(codeQuestions[currentQuestionIndex].answers[1].text);
+        ans3Button.removeClass('hide'); ans3Button.text(codeQuestions[currentQuestionIndex].answers[2].text);
+        ans4Button.removeClass('hide'); ans4Button.text(codeQuestions[currentQuestionIndex].answers[3].text);
+        counter = 0;
+        setInterval(function () {
+            totalSeconds++
+            counter++;
+            console.log(counter);
+            if (counter === 60) {
+                minutes++;
+                counter = 0;
+            }
+
+            $('#minandsec').removeClass('hide').text(`${minutes} minutes and ${counter} seconds`);
+
+        }, 1000);
+        $("#ans1").on("click", nextQuestion);
+        $("#ans2").on("click", nextQuestion);
+        $("#ans3").on("click", nextQuestion);
+        $("#ans4").on("click", nextQuestion);
+    };
+
+    function checkAnswer() {
+        endTimer(ans);
+        console.log("question: " + i + ", counterValue = " + counter);
+        timerPerQuestion.push(counter);
+        for (var j = 0; j < codeQuestions[i - 1].answers[j].length; j++) {
+            if (ans == codeQuestions[i - 1].answers[j].ans) {
+                if (codeQuestions[i - 1].answers[j].correct) {
+                    confirm("You are correct");
+                    correctAnswers++;
+                    answer.push(1);
+                }
+                else {
+                    confirm("you are WRONG!!!!");
+                    answer.push(0);
+                }
+            }
+
+        }
+
+    };
 
 
 
@@ -41,146 +108,4 @@ $(document).ready(function () {
         },
 
     ];
-
-    $("#startButton").on("click", startQuiz)
-
-    function startQuiz() {
-        $("#ans1").on("click", nextQuestion);
-        $("#ans2").on("click", nextQuestion);
-        $("#ans3").on("click", nextQuestion);
-        $("#ans4").on("click", nextQuestion);
-
-        $("#startButton").attr("class", "hide");
-
-        i = 0;
-        var counter = 0;
-        var minutes = 0;
-
-        function startTimer() {
-            counter = 0;
-            testTimer = setInterval(function () {
-                totalSeconds++
-                counter++;
-                console.log(counter);
-                if (counter === 59) {
-                    minutes++;
-                    counter = 0;
-                }
-                $("#seconds").attr("class", "unhide"); $("#seconds").text(counter + " seconds");
-                $("#minutes").attr("class", "unhide"); $("#minutes").text(minutes + " minutes");
-                return (totalSeconds);
-
-            }, 1000);
-        };
-
-        function endTimer() {
-
-            for (var c = 0; c < answer.length;) {
-
-                console.log(answer[c]);
-                console.log(totalSeconds);
-                if (answer[c] == 1) {
-                    score = 1000;
-                }
-                else {
-                    score = 0;
-                }
-
-                totalScore = ((totalScore + score) - totalSeconds);
-                if (totalScore > currentHighscore) {
-                    currentHighscore = totalScore;
-                    localStorage.setItem('highScore', currentHighscore);
-                    localStorage.setItem('yourScore',totalScore);
-                    console.log(totalScore);
-                }
-                else {
-                    localStorage.setItem('yourScore',totalScore);
-                }
-                c++
-            }
-
-            clearInterval(testTimer);
-
-        }
-
-
-
-
-
-
-        function checkAnswer(ans) {
-            console.log("question: " + i + ", counterValue = " + counter);
-            timerPerQuestion.push(counter);
-
-            endTimer();
-            for (var j = 0; j < codeQuestions[i - 1].answers.length; j++) {
-                if (ans == codeQuestions[i - 1].answers[j].ans) {
-                    if (codeQuestions[i - 1].answers[j].correct) {
-                        confirm ("You are correct");
-                        answer.push(1);
-                    } else {
-                        confirm ("you are WRONG!!!!");
-                        answer.push(0);
-                    }
-                }
-
-            }
-
-        };
-
-        function nextQuestion(id) {
-
-            if (i > 0) {
-                console.log(id.target.id);
-                checkAnswer(id.target.id);
-            }
-
-            if (i < codeQuestions.length) {
-
-                $("#question").attr("class", "unhide margin"); $("#question").text(codeQuestions[i].question);
-                $("#ans1").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans1").text(codeQuestions[i].answers[0].text);
-                $("#ans2").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans2").text(codeQuestions[i].answers[1].text);
-                $("#ans3").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans3").text(codeQuestions[i].answers[2].text);
-                $("#ans4").attr("class", "unhide btn btn-info btn-hover btn-pill"); $("#ans4").text(codeQuestions[i].answers[3].text);
-                startTimer();
-
-
-            }
-            if (i == codeQuestions.length) {
-                endGame();
-            }
-
-            i++;
-
-        }
-        nextQuestion();
-
-        function endGame() {
-            console.log(answer);
-            console.log(timerPerQuestion);
-            $("#question").text("Thank you for Taking my quiz");
-            $("#ans1").attr("class", "hide");
-            $("#ans2").attr("class", "hide");
-            $("#ans3").attr("class", "hide");
-            $("#ans4").attr("class", "hide");
-            $("#minutes").attr("class", "hide");
-            $("#seconds").attr("class", "hide");
-            var yourScore = localStorage.getItem('yourScore');
-            var highScore = localStorage.getItem('highScore');
-            $("#ans1").attr("class", "unhide text-bold");$("#ans1").text("Your Score was "+yourScore);
-            $("#ans2").attr("class", "unhide text-bold");$("#ans2").text("Previous High Score "+highScore);
-            $("#ans3").attr("class", "unhide btn btn-danger btn-hover btn-pill"); $("#ans3").text("Click here to Play again");
-            
-            
-
-
-
-        }
-
-
-    };
-
 });
-
-
-
