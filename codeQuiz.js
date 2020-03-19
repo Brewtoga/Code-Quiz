@@ -6,22 +6,29 @@ $(document).ready(function () {
     const ans2Button = $('#ans2')
     const ans3Button = $('#ans3')
     const ans4Button = $('#ans4')
-    var totalSeconds;
+    var totalSecondsArray = [];
     var minutes = 0;
-    var currentQuestionIndex;
     var ct = 6;
     var questionTimer;
-    var secondsArray = [];
     var correctAnsArray = [];
+    let allQuestionsArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let newRandomArray = [];
+    var Index = 0;
+    var counter = 0;
+    var totalSeconds = 0;
+
+    ans1Button.on("click", checkAnswer);
+    ans2Button.on("click", checkAnswer);
+    ans3Button.on("click", checkAnswer);
+    ans4Button.on("click", checkAnswer);
+    nextButton.on('click', displayNextQuestion);
 
 
 
 
-    startButton.on('click', startQuiz);
 
-    function startQuiz() {
-        let allQuestionsArray = [0, 3, 9, 8, 4, 5, 2, 1, 6, 7];
-        let shuffleallquestionsArray = function(arr) {
+    startButton.on('click', function startQuiz() {
+        let shuffleallquestionsArray = function (arr) {
             let newPos,
                 temp;
             for (let j = arr.length - 1; j > 0; j--) {
@@ -32,18 +39,19 @@ $(document).ready(function () {
             };
             return arr;
         };
-        let newRandomArray = shuffleallquestionsArray(allQuestionsArray);
+        newRandomArray = shuffleallquestionsArray(allQuestionsArray);
         console.log(newRandomArray);
         console.log('started');
         startButton.addClass('hide');
-        currentQuestionIndex = 0;
+
         var countDowntoBegin = setInterval(function () {
             ct--
             $('#ctDown').removeClass('hide').text(`Quiz will begin in ${ct} seconds!`);
 
             if (ct === -1) {
                 stopCountdown();
-                startTimer();
+                displayNextQuestion();
+
                 ct = 6
             }
         }, 1000)
@@ -52,16 +60,52 @@ $(document).ready(function () {
             $('#ctDown').addClass('hide');
             clearInterval(countDowntoBegin);
         }
-    };
+    });
 
-    function startTimer() {
-        questionButton.removeClass("hide"); questionButton.text(codeQuestions[currentQuestionIndex].question);
-        ans1Button.removeClass('hide'); ans1Button.text(codeQuestions[currentQuestionIndex].answers[0].text);
-        ans2Button.removeClass('hide'); ans2Button.text(codeQuestions[currentQuestionIndex].answers[1].text);
-        ans3Button.removeClass('hide'); ans3Button.text(codeQuestions[currentQuestionIndex].answers[2].text);
-        ans4Button.removeClass('hide'); ans4Button.text(codeQuestions[currentQuestionIndex].answers[3].text);
-        var counter = 0;
-        questionTimer = setInterval(function (totalSeconds) {
+
+
+    function stopQuestionTimer() {
+        // console.log(totalSeconds);
+        totalSeconds = 0;
+        counter = 0;
+        clearInterval(questionTimer);
+    }
+
+    function checkAnswer(e) {
+        stopQuestionTimer();
+        selectedAnswer = e.target.id
+        console.log(selectedAnswer);
+        console.log(totalSecondsArray);
+
+        console.log("checking answers ");
+        // hiding buttons
+        questionButton.addClass("hide"); ans1Button.addClass('hide'); ans2Button.addClass('hide');
+        ans3Button.addClass('hide'); ans4Button.addClass('hide'); $('#minandsec').addClass('hide');
+        nextButton.removeClass('hide');
+        if (selectedAnswer === 'ans1' && codeQuestions[newRandomArray[Index]].answers[0].correct) {
+            correctAnsArray.push(1);
+            console.log(correctAnsArray);
+        }
+        else if (selectedAnswer === 'ans2' && codeQuestions[newRandomArray[Index]].answers[1].correct) {
+            correctAnsArray.push(1);
+            console.log(correctAnsArray);
+        }
+        else if (selectedAnswer === 'ans3' && codeQuestions[newRandomArray[Index]].answers[2].correct) {
+            correctAnsArray.push(1);
+            console.log(correctAnsArray);
+        }
+        else if (selectedAnswer === 'ans4' && codeQuestions[newRandomArray[Index]].answers[3].correct) {
+            correctAnsArray.push(1);
+            console.log(correctAnsArray);
+        }
+        else {
+            correctAnsArray.push(0);
+        }
+
+
+    };
+    function displayNextQuestion() {
+        questionTimer = setInterval(function () {
             totalSeconds++
             counter++;
             console.log(counter);
@@ -71,56 +115,23 @@ $(document).ready(function () {
             }
 
             $('#minandsec').removeClass('hide').text(`${minutes} minutes and ${counter} seconds`);
+            totalSecondsArray.push('s');
 
         }, 1000);
-        ans1Button.on("click", checkAnswer);
-        ans2Button.on("click", checkAnswer);
-        ans3Button.on("click", checkAnswer);
-        ans4Button.on("click", checkAnswer);
-    };
-
-    function stopQuestionTimer() {
-        // console.log(totalSeconds);
-        clearInterval(questionTimer);
-    }
-
-    function checkAnswer(id) {
-        const selectedAnswer = id.target.id
-        console.log(selectedAnswer);
-        if (selectedAnswer === 'ans1' && codeQuestions[currentQuestionIndex].answers[0].correct) {
-            correctAnsArray.push(1);
-            console.log(correctAnsArray);
-        }
-        else if (selectedAnswer === 'ans2' && codeQuestions[currentQuestionIndex].answers[1].correct) {
-            correctAnsArray.push(1);
-            console.log(correctAnsArray);
-        }
-        else if (selectedAnswer === 'ans3' && codeQuestions[currentQuestionIndex].answers[2].correct) {
-            correctAnsArray.push(1);
-            console.log(correctAnsArray);
-        }
-        else if (selectedAnswer === 'ans4' && codeQuestions[currentQuestionIndex].answers[3].correct) {
-            correctAnsArray.push(1);
-            console.log(correctAnsArray);
-        }
-        else {
-            correctAnsArray.push(0);
-        }
-        stopQuestionTimer();
-        console.log("checking answers ");
-        questionButton.addClass("hide"); ans1Button.addClass('hide'); ans2Button.addClass('hide');
-        ans3Button.addClass('hide'); ans4Button.addClass('hide'); $('#minandsec').addClass('hide');
-        nextButton.removeClass('hide'); nextButton.on('click', displayNextQuestion)
-
-    };
-    function displayNextQuestion() {
+        questionButton.removeClass("hide"); questionButton.text(codeQuestions[newRandomArray[Index]].question);
+        ans1Button.removeClass('hide'); ans1Button.text(codeQuestions[newRandomArray[Index]].answers[0].text);
+        ans2Button.removeClass('hide'); ans2Button.text(codeQuestions[newRandomArray[Index]].answers[1].text);
+        ans3Button.removeClass('hide'); ans3Button.text(codeQuestions[newRandomArray[Index]].answers[2].text);
+        ans4Button.removeClass('hide'); ans4Button.text(codeQuestions[newRandomArray[Index]].answers[3].text);
         nextButton.addClass('hide');
-        currentQuestionIndex++
-        if (currentQuestionIndex > codeQuestions.length) {
+
+
+        if (Index > codeQuestions.length) {
             endGame();
         }
         else {
-            startTimer();
+            Index++
+            questionTimer;
         }
     }
 
