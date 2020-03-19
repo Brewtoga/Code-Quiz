@@ -11,10 +11,6 @@ display:none;
 
 }
 
-.unhide{
-    display: flex;
-}
-
 .whiteandcenter{
     background-color: white;
     text-align: center;
