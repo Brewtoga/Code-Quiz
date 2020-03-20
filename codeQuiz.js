@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    const playAgain = $('#playAgainButton')
     const startButton = $("#startButton")
     const nextButton = $('#nextButton')
     const questionButton = $("#question")
@@ -6,6 +7,10 @@ $(document).ready(function () {
     const ans2Button = $('#ans2')
     const ans3Button = $('#ans3')
     const ans4Button = $('#ans4')
+    const bestScore = $('#highScore')
+    const htmlPage = $(document)
+    const correctButton = $('#correct')
+    const notCorrectButton = $('#notcorrect')
     var totalSecondsArray = [];
     var minutes = 0;
     var ct = 4;
@@ -18,6 +23,8 @@ $(document).ready(function () {
     var counter = 0;
     var totalSeconds = 0;
     var questionTimer;
+    var highScore = 0;
+
 
 
     ans1Button.on("click", checkAnswer);
@@ -25,9 +32,14 @@ $(document).ready(function () {
     ans3Button.on("click", checkAnswer);
     ans4Button.on("click", checkAnswer);
     nextButton.on('click', displayNextQuestion);
+    playAgain.on('click', reLoadPage);
 
     startButton.on('click', function startQuiz() {
+        newScore = 0;
         Index = 0;
+        j = 0;
+        i = 0;
+
         let shuffleallquestionsArray = function (arr) {
             let newPos,
                 temp;
@@ -86,28 +98,31 @@ $(document).ready(function () {
         nextButton.removeClass('hide');
         if (selectedAnswer === 'ans1' && codeQuestions[newRandomArray[Index]].answers[0].correct) {
             correctAnsArray.push(1);
-            console.log(correctAnsArray);
+            correctButton.removeClass('hide');
         }
         else if (selectedAnswer === 'ans2' && codeQuestions[newRandomArray[Index]].answers[1].correct) {
             correctAnsArray.push(1);
-            console.log(correctAnsArray);
+            correctButton.removeClass('hide');
         }
         else if (selectedAnswer === 'ans3' && codeQuestions[newRandomArray[Index]].answers[2].correct) {
             correctAnsArray.push(1);
-            console.log(correctAnsArray);
+            correctButton.removeClass('hide');
         }
         else if (selectedAnswer === 'ans4' && codeQuestions[newRandomArray[Index]].answers[3].correct) {
             correctAnsArray.push(1);
-            console.log(correctAnsArray);
+            correctButton.removeClass('hide');
         }
         else {
             correctAnsArray.push(0);
+            notCorrectButton.removeClass('hide');
         }
 
 
     };
     function displayNextQuestion() {
-        if (Index > allQuestionsArray.length - 9) {
+        correctButton.addClass('hide');
+        notCorrectButton.addClass('hide');
+        if (Index > allQuestionsArray.length - 3) {
             stopQuestionTimer();
             endGame();
         }
@@ -141,7 +156,7 @@ $(document).ready(function () {
 
     function endGame() {
         nextButton.addClass('hide');
-        startButton.removeClass('hide')
+        playAgain.removeClass('hide');
         console.log(correctAnsArray);
         secondsScore = totalSecondsArray.length;
         for (var j = 0; j < correctAnsArray.length; j++) {
@@ -153,8 +168,29 @@ $(document).ready(function () {
             }
         }
         console.log(secondsScore, correctAns);
-        // var newScore = 
+        var newScore = (correctAns * 1000) - (secondsScore * 3);
+        console.log(newScore);
 
+        highScore = localStorage.getItem('highScore')
+        if (newScore > highScore) {
+            highScore = newScore
+            localStorage.removeItem('highScore');
+            localStorage.setItem('highScore', highScore);
+            bestScore.text(`You have the New High Score ${highScore} points YAY !!`)
+        }
+        else {
+            console.log(highScore);
+            bestScore.text(` You were unable to beat the current High Score ${highScore} points BOOO!!`)
+
+        }
+
+
+
+
+    }
+
+    function reLoadPage() {
+        location.reload(htmlPage);
     }
 
 
