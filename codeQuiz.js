@@ -8,14 +8,17 @@ $(document).ready(function () {
     const ans4Button = $('#ans4')
     var totalSecondsArray = [];
     var minutes = 0;
-    var ct = 6;
-    var questionTimer;
+    var ct = 4;
+    var secondsScore = 0;
+    var correctAns = 0;
     var correctAnsArray = [];
     let allQuestionsArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     let newRandomArray = [];
     var Index = 0;
     var counter = 0;
     var totalSeconds = 0;
+    var questionTimer;
+
 
     ans1Button.on("click", checkAnswer);
     ans2Button.on("click", checkAnswer);
@@ -23,11 +26,8 @@ $(document).ready(function () {
     ans4Button.on("click", checkAnswer);
     nextButton.on('click', displayNextQuestion);
 
-
-
-
-
     startButton.on('click', function startQuiz() {
+        Index = 0;
         let shuffleallquestionsArray = function (arr) {
             let newPos,
                 temp;
@@ -52,7 +52,7 @@ $(document).ready(function () {
                 stopCountdown();
                 displayNextQuestion();
 
-                ct = 6
+                ct = 4
             }
         }, 1000)
 
@@ -76,6 +76,8 @@ $(document).ready(function () {
         selectedAnswer = e.target.id
         console.log(selectedAnswer);
         console.log(totalSecondsArray);
+        console.log(codeQuestions);
+
 
         console.log("checking answers ");
         // hiding buttons
@@ -105,39 +107,54 @@ $(document).ready(function () {
 
     };
     function displayNextQuestion() {
-        questionTimer = setInterval(function () {
-            totalSeconds++
-            counter++;
-            console.log(counter);
-            if (counter === 60) {
-                minutes++;
-                counter = 0;
-            }
-
-            $('#minandsec').removeClass('hide').text(`${minutes} minutes and ${counter} seconds`);
-            totalSecondsArray.push('s');
-
-        }, 1000);
-        questionButton.removeClass("hide"); questionButton.text(codeQuestions[newRandomArray[Index]].question);
-        ans1Button.removeClass('hide'); ans1Button.text(codeQuestions[newRandomArray[Index]].answers[0].text);
-        ans2Button.removeClass('hide'); ans2Button.text(codeQuestions[newRandomArray[Index]].answers[1].text);
-        ans3Button.removeClass('hide'); ans3Button.text(codeQuestions[newRandomArray[Index]].answers[2].text);
-        ans4Button.removeClass('hide'); ans4Button.text(codeQuestions[newRandomArray[Index]].answers[3].text);
-        nextButton.addClass('hide');
-
-
-        if (Index > codeQuestions.length) {
+        if (Index > allQuestionsArray.length - 9) {
+            stopQuestionTimer();
             endGame();
         }
         else {
             Index++
             questionTimer;
+            questionButton.removeClass("hide"); questionButton.text(codeQuestions[newRandomArray[Index]].question);
+            ans1Button.removeClass('hide'); ans1Button.text(codeQuestions[newRandomArray[Index]].answers[0].text);
+            ans2Button.removeClass('hide'); ans2Button.text(codeQuestions[newRandomArray[Index]].answers[1].text);
+            ans3Button.removeClass('hide'); ans3Button.text(codeQuestions[newRandomArray[Index]].answers[2].text);
+            ans4Button.removeClass('hide'); ans4Button.text(codeQuestions[newRandomArray[Index]].answers[3].text);
+            nextButton.addClass('hide');
+            questionTimer = setInterval(function () {
+                totalSeconds++
+                counter++;
+                console.log(counter);
+                if (counter === 60) {
+                    minutes++;
+                    counter = 0;
+                }
+
+                $('#minandsec').removeClass('hide').text(`${minutes} minutes and ${counter} seconds`);
+                totalSecondsArray.push('s');
+
+            }, 1000);
+
+
         }
     }
 
+
     function endGame() {
+        nextButton.addClass('hide');
         startButton.removeClass('hide')
-        console.log('done');
+        console.log(correctAnsArray);
+        secondsScore = totalSecondsArray.length;
+        for (var j = 0; j < correctAnsArray.length; j++) {
+            if (correctAnsArray[j] === 1) {
+                correctAns++
+            }
+            else {
+                console.log(correctAns)
+            }
+        }
+        console.log(secondsScore, correctAns);
+        // var newScore = 
+
     }
 
 
